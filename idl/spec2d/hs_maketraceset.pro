@@ -42,10 +42,13 @@ PRO hs_maketraceset, flatfile=flatfile, rootsearch=rootsearch, $
   
   if NOT keyword_set(rerun) then rerun = string(0, format='(i4.4)')
   if NOT keyword_set(flatfile) then begin
-     file = findfile('*fit*')
-     N = n_elements(file)/2
-     header = headfits(file(N), exten=1,  /silent)
-     if not keyword_set(mjd) then mjd = long(sxpar(header, 'MJD'))
+     if not keyword_set(mjd) then begin
+        file = findfile('*fit*')
+        N = n_elements(file)/2
+        header = headfits(file(N), exten=1,  /silent)
+        mjd = long(sxpar(header, 'MJD'))
+     endif
+
      flatfile = 'calibration/'+rerun+'/dflat.fits'
      if file_test(flatfile) eq 0 then begin
         flatfile = findfile('calibration/' + rerun + '/dflat-*fits')
